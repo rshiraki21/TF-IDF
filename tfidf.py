@@ -3,28 +3,24 @@ import os
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-path_to_json = "Internship\Internship Data ArmyAPI Pull_06222023"
-articles = [article for article in os.listdir(path_to_json)] # list of all the articles
+path_to_json_files = "Internship Data ArmyAPI Pull_06222023" 
 
-# * Need to read articles in json_files, read the 'text' values, put each of those into a corpus, THEN apply TF-IDF
+# * List of all the text values from json files
 corpus = []
-
-for article in articles:
-    with open(article) as json_file:
-        text = json.load(json_file)
+for file in os.listdir(path_to_json_files):
+    filename = "%s/%s" % (path_to_json_files, file)
+    with open(filename, "r") as f:
+        key_value = json.load(f)
+        text = key_value["text"]
         corpus.append(text)
-print(corpus)
 
+vectorizer = TfidfVectorizer(stop_words="english") # initialize tfidf
 
-# print(json_files) # ! TODO: need to extract text from json files, as TF-IDF is only applied to the NAMES of the files, rather than the content inside
-
-# vectorizer = TfidfVectorizer(stop_words="english") # initialize tfidf
-
-# tfidf = vectorizer.fit_transform(json_files) # apply tfidf to articles
+tfidf = vectorizer.fit_transform(corpus) # apply tfidf to corpus
 
 # for ele1, ele2 in zip(vectorizer.get_feature_names_out(), vectorizer.idf_): # print idf values for common words
 #     print(ele1, ':', ele2)
 
-# pd.DataFrame(tfidf.toarray()).to_csv("Internship\ArticleTFIDF") # export tfidf matrix to a csv
+pd.DataFrame(tfidf.toarray()).to_csv("ArticleTFIDF") # export tfidf matrix to a csv
 
-# pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("Internship/feature_names") # export feature names to a csv
+pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("feature_names") # export feature names to a csv
