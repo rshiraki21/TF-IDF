@@ -6,15 +6,18 @@ import re
 import string
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+nltk.download('stopwords')
 stopwords = nltk.corpus.stopwords.words("english")
 
-path_to_json = "Internship\Internship Data ArmyAPI Pull_06222023"
-# path_to_json = "Internship\TestJSON"
+tokenizer = nltk.tokenize.WordPunctTokenizer()
+
+path_to_json = "Internship Data ArmyAPI Pull_06222023" # replace this with the relative path of the Army API folder if this doesn't work
+# path_to_json = "TestJSON"
 
 # * Function to process text
 def clean_text(text):
     text = "".join([word.lower() for word in text if word not in string.punctuation]) # remove punctuation and makes all text lowercase
-    tokens = re.split('\W+', text) # causes text to split when it sees more than one non-word characters (whitespace, special characters, etc.)
+    tokens = tokenizer.tokenize(text)  # tokenize the text
     text = [word for word in tokens if word not in stopwords] # remove stopwords
     for k in range(len(text)): # tokenizes numbers
         if text[k].isnumeric(): 
@@ -34,8 +37,5 @@ vectorizer = TfidfVectorizer(analyzer=clean_text)
 tfidf = vectorizer.fit_transform(unprocessed_texts)
 
 # * Exporting findings to csv
-pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("Internship/feature_names") # export feature names to a csv
+pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("feature_names") # export feature names to a csv
 pd.DataFrame(tfidf.toarray()).to_excel("tfidf_matrix.xlsx") # export tfidf matrix to a spreadsheet
-
-
-
