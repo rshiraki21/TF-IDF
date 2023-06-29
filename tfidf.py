@@ -9,10 +9,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 nltk.download('stopwords')
 stopwords = nltk.corpus.stopwords.words("english")
 
-tokenizer = nltk.tokenize.WordPunctTokenizer()
-
-path_to_json = "Internship Data ArmyAPI Pull_06222023" # replace this with the relative path of the Army API folder if this doesn't work
-# path_to_json = "TestJSON"
+path_to_json = "Internship\Internship Data ArmyAPI Pull_06222023"
+# path_to_json = "Internship\TestJSON"
 
 # * Function to process text
 def clean_text(text):
