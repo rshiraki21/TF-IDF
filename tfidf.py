@@ -27,7 +27,7 @@ for file in os.listdir(path_to_json):
     filename = "%s/%s" % (path_to_json, file)
     with open (filename, "r") as f:
         article = json.load(f)
-        unprocessed_texts.append(article["text"])
+        unprocessed_texts.append(clean_text(article["text"]))
 
 # * Initializing TF-IDF
 vectorizer = TfidfVectorizer(analyzer=clean_text)
@@ -35,7 +35,7 @@ tfidf = vectorizer.fit_transform(unprocessed_texts)
 
 # * Exporting findings to csv
 pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("Internship/feature_names") # export feature names to a csv
-pd.DataFrame(tfidf.toarray()).to_csv("Internship/tfidf_matrix") # export tfidf matrix to a csv
+pd.DataFrame(tfidf.toarray()).to_excel("tfidf_matrix.xlsx") # export tfidf matrix to a spreadsheet
 
 
 
