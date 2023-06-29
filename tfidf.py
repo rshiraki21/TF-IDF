@@ -37,5 +37,5 @@ vectorizer = TfidfVectorizer(analyzer=clean_text)
 tfidf = vectorizer.fit_transform(unprocessed_texts)
 
 # * Exporting findings to csv
-pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("feature_names") # export feature names to a csv
+pd.DataFrame(vectorizer.get_feature_names_out()).to_excel("feature_names.xlsx") # export feature names to a 
 pd.DataFrame(tfidf.toarray()).to_excel("tfidf_matrix.xlsx") # export tfidf matrix to a spreadsheet
