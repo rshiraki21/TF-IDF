@@ -8,8 +8,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 stopwords = nltk.corpus.stopwords.words("english")
 
-path_to_json = "Internship\Internship Data ArmyAPI Pull_06222023"
-# path_to_json = "Internship\TestJSON"
+path_to_json = "Internship Data ArmyAPI Pull_06222023" # replace this with the relative path of the Army API folder if this doesn't work
+# path_to_json = "TestJSON"
 
 # * Function to process text
 def clean_text(text):
