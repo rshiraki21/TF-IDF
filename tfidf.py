@@ -22,20 +22,21 @@ def clean_text(text):
     tokens = word_tokenize(text)  # tokenize the text
     text = [word for word in tokens if word not in stopwords]  # remove stopwords
     text = ["<NUM>" if word.isnumeric() else word for word in text] # replace numbers with <NUM>
-    return " ".join(text)
+    return text
 
-# * Creates a list consisting of all the text for processing
-unprocessed_texts = []
+# * Creates a list consisting of all the pre-processed text
+corpus = []
 for file in os.listdir(path_to_json):
     filename = "%s/%s" % (path_to_json, file)
     with open (filename, "r") as f:
         article = json.load(f)
-        unprocessed_texts.append(clean_text(article["text"]))
+        corpus.append(article["text"])
+print(corpus)
 
 # * Initializing TF-IDF
 vectorizer = TfidfVectorizer(analyzer=clean_text)
-tfidf = vectorizer.fit_transform(unprocessed_texts)
+tfidf = vectorizer.fit_transform(corpus)
 
 # * Exporting findings to csv
-pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("feature_names") # export feature names to a spreadsheet
-pd.DataFrame(tfidf.toarray()).to_excel("tfidf_matrix.xlsx") # export tfidf matrix to a spreadsheet
+pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("feature_names")
+pd.DataFrame(tfidf.toarray()).to_excel("tfidf_matrix.xlsx")
