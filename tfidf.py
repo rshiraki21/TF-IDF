@@ -2,7 +2,6 @@ import json
 import nltk
 import os
 import pandas as pd
-import re
 import string
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.tokenize import word_tokenize
@@ -31,12 +30,13 @@ for file in os.listdir(path_to_json):
     with open (filename, "r") as f:
         article = json.load(f)
         corpus.append(article["text"])
-print(corpus)
 
 # * Initializing TF-IDF
 vectorizer = TfidfVectorizer(analyzer=clean_text)
 tfidf = vectorizer.fit_transform(corpus)
 
-# * Exporting findings to csv
+# * Exporting findings
 pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("feature_names")
 pd.DataFrame(tfidf.toarray()).to_excel("tfidf_matrix.xlsx")
+
+# ! TODO: Exporting top 5 words from each article
