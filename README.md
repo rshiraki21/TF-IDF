@@ -11,3 +11,5 @@ Recurrent Neural Network (RNN): A machine learning algorithm ideal for text anal
 Notes:
 The TestJSON folder consists of 3 JSON files pulled from the Army API folder. This is used better to visualize the TF-IDF matrix before the API data.
 By default, tfidf.py will use the actual ArmyAPI data. You may also need to change path_to_json to be the relative path of your directory's Army API or TestJSON folders.
+feature_names will list all words TF-IDF detected in alphabetical order. All numbers were replaced with the word "<NUM>"
+tfidf_matrix is the TF-IDF matrix that is often used to visualize the output. Due to the size of the corpus, I do not recommend trying to open it, as its size will make it very hard to understand the results meaningfully. I am working on listing the top 5-10 most relevant words for each document, which will better reflect important findings. 
