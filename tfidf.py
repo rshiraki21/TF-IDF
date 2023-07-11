@@ -1,7 +1,6 @@
 import copy
 import json
 import nltk
-import numpy as np
 import os
 import pandas as pd
 import string
@@ -48,7 +47,6 @@ def partition_matrix(matrix):
     nonzero_row = matrix[0]
     nonzero_col = matrix[1]  # end = index 15
     current_row = nonzero_row[0]
-    current_row_index = 0
     all_tokens_and_scores = [] # list of lists, where each list is all words and their scores for each row
     current_row_token_and_score = []
     col_count = -1
