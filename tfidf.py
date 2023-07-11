@@ -8,8 +8,8 @@ import string
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.tokenize import word_tokenize
 
-# nltk.download('stopwords')
-# nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('punkt')
 stopwords = nltk.corpus.stopwords.words("english")
 
 tokenizer = nltk.tokenize.WordPunctTokenizer()
@@ -33,17 +33,17 @@ for file in os.listdir(path_to_json):
         article = json.load(f)
         corpus.append(article["text"])
 
-# * Initializing TF-IDF
+# * Initializing TF-IDF and related variables
 vectorizer = TfidfVectorizer(analyzer=clean_text)
 tfidf = vectorizer.fit_transform(corpus)
 tfidf_array = tfidf.toarray() # numpy.ndarray
 tfidf_words = vectorizer.get_feature_names_out()
 
-# * Exporting findings
+# * Exporting TF-IDF matrix and feature names
 pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("feature_names")
 pd.DataFrame(tfidf_array).to_excel("tfidf_matrix.xlsx")
 
-# * Export top 5 words from each article
+# * Returns a list of tuples containing the word value and col for each row in the TF-IDF matrix. Only nonzero values are included
 def partition_matrix(matrix):
     nonzero_row = matrix[0]
     nonzero_col = matrix[1]  # end = index 15
@@ -58,11 +58,12 @@ def partition_matrix(matrix):
             all_tokens_and_scores.append(copy.deepcopy(current_row_token_and_score))
             current_row_token_and_score.clear()
             current_row = row
-        current_row_token_and_score.append((tfidf_array[row, col], col)) # structure: (word value, (row, col))
+        current_row_token_and_score.append((tfidf_array[row, col], col)) # structure: (word value, col)
         if col_count == len(nonzero_col) - 1:
             all_tokens_and_scores.append(copy.deepcopy(current_row_token_and_score))
     return all_tokens_and_scores
 
+# * Gets top 5 words per document
 def sort_partitions(partitions):
     top5_list = []
     for p in partitions:
