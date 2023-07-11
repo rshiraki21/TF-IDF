@@ -39,7 +39,7 @@ tfidf = vectorizer.fit_transform(corpus)
 tfidf_array = tfidf.toarray() # numpy.ndarray
 tfidf_words = vectorizer.get_feature_names_out()
 
-# * Exporting findings to csv
+# * Exporting findings
 pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("feature_names")
 pd.DataFrame(tfidf_array).to_excel("tfidf_matrix.xlsx")
 
