@@ -38,10 +38,6 @@ tfidf = vectorizer.fit_transform(corpus)
 tfidf_array = tfidf.toarray() # numpy.ndarray
 tfidf_words = vectorizer.get_feature_names_out()
 
-# * Exporting TF-IDF matrix and feature names
-pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("feature_names")
-pd.DataFrame(tfidf_array).to_excel("tfidf_matrix.xlsx")
-
 # * Returns a list of tuples containing the word value and col for each row in the TF-IDF matrix. Only nonzero values are included
 def partition_matrix(matrix):
     nonzero_row = matrix[0]
@@ -78,4 +74,8 @@ def sort_partitions(partitions):
 
 partitions = partition_matrix(tfidf_array.nonzero()) # partition all nonzero elements by row
 top5_words = sort_partitions(partitions)
+
+# * Exporting feature names, TF-IDF matrix, and top 5 words per document
+pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("feature_names")
+pd.DataFrame(tfidf_array).to_excel("tfidf_matrix.xlsx")
 pd.DataFrame(sort_partitions(partitions)).to_csv("results")
