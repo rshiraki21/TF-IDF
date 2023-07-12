@@ -33,7 +33,7 @@ for file in os.listdir(path_to_json):
         corpus.append(article["text"])
 
 # * Initializing TF-IDF and related variables
-vectorizer = TfidfVectorizer(analyzer=clean_text)
+vectorizer = TfidfVectorizer(analyzer=clean_text) # can't use callable analyzer and ngram_range
 tfidf = vectorizer.fit_transform(corpus)
 tfidf_array = tfidf.toarray() # numpy.ndarray
 tfidf_words = vectorizer.get_feature_names_out()
@@ -76,6 +76,6 @@ partitions = partition_matrix(tfidf_array.nonzero()) # partition all nonzero ele
 top5_words = sort_partitions(partitions)
 
 # * Exporting feature names, TF-IDF matrix, and top 5 words per document
-pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("feature_names")
-pd.DataFrame(tfidf_array).to_excel("tfidf_matrix.xlsx")
-pd.DataFrame(sort_partitions(partitions)).to_csv("results")
+pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("ngram_feature_names")
+pd.DataFrame(tfidf_array).to_excel("ngram_tfidf_matrix.xlsx")
+pd.DataFrame(sort_partitions(partitions)).to_csv("ngram_results")
