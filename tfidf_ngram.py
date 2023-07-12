@@ -68,6 +68,6 @@ partitions = partition_matrix(tfidf_array.nonzero()) # partition all nonzero ele
 top5_words = sort_partitions(partitions)
 
 # * Exporting feature names, TF-IDF matrix, and top 5 words per document
-pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("ngram_feature_names.csv")
-pd.DataFrame(tfidf_array).to_csv("ngram_tfidf_matrix.csv")
-pd.DataFrame(sort_partitions(partitions)).to_csv("ngram_results.csv")
+pd.DataFrame(vectorizer.get_feature_names_out()).to_json("TFIDFngramResults/ngram_feature_names.json", orient="values")
+pd.DataFrame(tfidf_array).to_csv("TFIDFngramResults/ngram_tfidf_matrix.csv")
+pd.DataFrame(sort_partitions(partitions)).to_json("TFIDFngramResults/ngram_results", orient="records")
