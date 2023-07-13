@@ -21,7 +21,7 @@ def clean_text(text):
     text = "".join([word.lower() for word in text if word not in string.punctuation])  # remove punctuation and make all text lowercase
     tokens = word_tokenize(text)  # tokenize the text
     text = [word for word in tokens if word not in stopwords]  # remove stopwords
-    # text = ["<NUM>" if word.isnumeric() else word for word in text] # replace numbers with <NUM>
+    text = ["<NUM>" if word.isnumeric() else word for word in text] # replace numbers with <NUM>, comment this out if results should include numbers
     return text
 
 # * Creates a list consisting of all the post-processed text
@@ -84,3 +84,4 @@ top5_words = sort_partitions(partitions)
 pd.DataFrame(vectorizer.get_feature_names_out()).to_json("TFIDF_ngram_results_numbers/ngram_feature_names.json", orient="values")
 pd.DataFrame(tfidf_array).to_csv("TFIDF_ngram_results_numbers/ngram_tfidf_matrix.csv")
 pd.DataFrame(sort_partitions(partitions)).to_json("TFIDF_ngram_results_numbers/ngram_results", orient="records")
+# pd.DataFrame(sort_partitions(partitions)).to_csv("TFIDF_ngram_results_no_numbers/results.csv")
