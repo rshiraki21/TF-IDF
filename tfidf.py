@@ -72,10 +72,10 @@ def sort_partitions(partitions):
         top5_list.append(top5_words)
     return top5_list
 
-partitions = partition_matrix(tfidf_array.nonzero()) # partition all nonzero elements by row
-top5_words = sort_partitions(partitions)
+# partitions = partition_matrix(tfidf_array.nonzero()) # partition all nonzero elements by row
+# top5_words = sort_partitions(partitions)
 
 # * Exporting feature names, TF-IDF matrix, and top 5 words per document
 # pd.DataFrame(vectorizer.get_feature_names_out()).to_json("TFIDFResults/feature_names.json", orient="values")
-pd.DataFrame(tfidf_array).to_csv("TFIDFResults/tfidf_matrix.csv")
+# pd.DataFrame(tfidf_array).to_csv("TFIDFResults/tfidf_matrix.csv")
 # pd.DataFrame(sort_partitions(partitions)).to_json("TFIDFResults/results", orient="records")

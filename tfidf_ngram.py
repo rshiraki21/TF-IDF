@@ -16,16 +16,29 @@ tokenizer = nltk.tokenize.WordPunctTokenizer()
 path_to_json = "Internship Data ArmyAPI Pull_06222023"
 # path_to_json = "TestJSON"
 
-# * Creates a list consisting of all the pre-processed text
+# * Function to process text
+def clean_text(text):
+    text = "".join([word.lower() for word in text if word not in string.punctuation])  # remove punctuation and make all text lowercase
+    tokens = word_tokenize(text)  # tokenize the text
+    text = [word for word in tokens if word not in stopwords]  # remove stopwords
+    # text = ["<NUM>" if word.isnumeric() else word for word in text] # replace numbers with <NUM>
+    return text
+
+# * Creates a list consisting of all the post-processed text
 corpus = []
 for file in os.listdir(path_to_json):
     filename = "%s/%s" % (path_to_json, file)
     with open (filename, "r") as f:
         article = json.load(f)
-        corpus.append(article["text"])
+        corpus.append(list(clean_text(article["text"])))
+
+# * Overrides string tokenizing step to preserve text processing and n-grams
+def identity_tokenizer(text):
+    return text
 
 # * Initializing TF-IDF and related variables
-vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1,3)) # can't use callable analyzer and ngram_range
+# ! TODO: figure out how to use clean_text() function to preprocess text
+vectorizer = TfidfVectorizer(tokenizer=identity_tokenizer, ngram_range=(1,3), lowercase=False) # can't use callable analyzer and ngram_range
 tfidf = vectorizer.fit_transform(corpus)
 tfidf_array = tfidf.toarray() # numpy.ndarray
 tfidf_words = vectorizer.get_feature_names_out()
@@ -68,6 +81,6 @@ partitions = partition_matrix(tfidf_array.nonzero()) # partition all nonzero ele
 top5_words = sort_partitions(partitions)
 
 # * Exporting feature names, TF-IDF matrix, and top 5 words per document
-pd.DataFrame(vectorizer.get_feature_names_out()).to_json("TFIDFngramResults/ngram_feature_names.json", orient="values")
-pd.DataFrame(tfidf_array).to_csv("TFIDFngramResults/ngram_tfidf_matrix.csv")
-pd.DataFrame(sort_partitions(partitions)).to_json("TFIDFngramResults/ngram_results", orient="records")
+pd.DataFrame(vectorizer.get_feature_names_out()).to_json("TFIDF_ngram_results_numbers/ngram_feature_names.json", orient="values")
+pd.DataFrame(tfidf_array).to_csv("TFIDF_ngram_results_numbers/ngram_tfidf_matrix.csv")
+pd.DataFrame(sort_partitions(partitions)).to_json("TFIDF_ngram_results_numbers/ngram_results", orient="records")
