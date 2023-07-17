@@ -37,7 +37,6 @@ def identity_tokenizer(text):
     return text
 
 # * Initializing TF-IDF and related variables
-# ! TODO: figure out how to use clean_text() function to preprocess text
 vectorizer = TfidfVectorizer(tokenizer=identity_tokenizer, ngram_range=(1,3), lowercase=False) # can't use callable analyzer and ngram_range
 tfidf = vectorizer.fit_transform(corpus)
 tfidf_array = tfidf.toarray() # numpy.ndarray
@@ -84,4 +83,4 @@ top5_words = sort_partitions(partitions)
 pd.DataFrame(vectorizer.get_feature_names_out()).to_json("TFIDF_ngram_results_numbers/ngram_feature_names.json", orient="values")
 pd.DataFrame(tfidf_array).to_csv("TFIDF_ngram_results_numbers/ngram_tfidf_matrix.csv")
 pd.DataFrame(sort_partitions(partitions)).to_json("TFIDF_ngram_results_numbers/ngram_results", orient="records")
-# pd.DataFrame(sort_partitions(partitions)).to_csv("TFIDF_ngram_results_no_numbers/results.csv")
+# pd.DataFrame(sort_partitions(partitions)).to_csv("TFIDF_ngram_results_no_numbers/results.csv") # option to export to csv for improved readability

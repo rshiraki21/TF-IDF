@@ -24,20 +24,6 @@ def clean_text(text):
     text = ["<NUM>" if word.isnumeric() else word for word in text] # replace numbers with <NUM>
     return text
 
-# * Creates a list consisting of all the pre-processed text
-corpus = []
-for file in os.listdir(path_to_json):
-    filename = "%s/%s" % (path_to_json, file)
-    with open (filename, "r") as f:
-        article = json.load(f)
-        corpus.append(article["text"])
-
-# * Initializing TF-IDF and related variables
-vectorizer = TfidfVectorizer(analyzer=clean_text) # can't use callable analyzer and ngram_range
-tfidf = vectorizer.fit_transform(corpus)
-tfidf_array = tfidf.toarray() # numpy.ndarray
-tfidf_words = vectorizer.get_feature_names_out()
-
 # * Returns a list of tuples containing the word value and col for each row in the TF-IDF matrix. Only nonzero values are included
 def partition_matrix(matrix):
     nonzero_row = matrix[0]
@@ -72,11 +58,27 @@ def sort_partitions(partitions):
         top5_list.append(top5_words)
     return top5_list
 
-partitions = partition_matrix(tfidf_array.nonzero()) # partition all nonzero elements by row
-top5_words = sort_partitions(partitions)
+# * Creates a list consisting of all the pre-processed text
+def generate_corpus(folder_path):
+    corpus = []
+    for file in os.listdir(folder_path):
+        filename = "%s/%s" % (folder_path, file)
+        with open (filename, "r") as f:
+            article = json.load(f)
+            corpus.append(article["text"])
+    return corpus
+
+# * Initializing TF-IDF and related variables
+vectorizer = TfidfVectorizer(analyzer=clean_text) # applies clean_text() as an analyzer
+tfidf = vectorizer.fit_transform(generate_corpus(folder_path=path_to_json))
+tfidf_array = tfidf.toarray()
+tfidf_words = vectorizer.get_feature_names_out()
+
+partitions = partition_matrix(tfidf_array.nonzero()) # gets all nonzero elements on each row
+top5_words = sort_partitions(partitions) # returns the top 5 words in descending order
 
 # * Exporting feature names, TF-IDF matrix, and top 5 words per document
 pd.DataFrame(vectorizer.get_feature_names_out()).to_json("TFIDFResults/feature_names.json", orient="values")
 pd.DataFrame(tfidf_array).to_csv("TFIDFResults/tfidf_matrix.csv")
-pd.DataFrame(sort_partitions(partitions)).to_json("TFIDFResults/results", orient="records")
-# pd.DataFrame(sort_partitions(partitions)).to_csv("TFIDFResults/results.csv")
+pd.DataFrame(top5_words).to_json("TFIDFResults/results", orient="records")
+# pd.DataFrame(top5_words).to_csv("TFIDFResults/results.csv") # option to export to csv for improved readability
