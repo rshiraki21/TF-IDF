@@ -7,6 +7,7 @@ from tfidf import clean_text, generate_corpus, partition_matrix, sort_partitions
 
 path_to_json = "Internship Data ArmyAPI Pull_06222023"
 # path_to_json = "TestJSON"
+# path_to_json = "Reuters"
 
 google_embeddings = pretrained_models.load(name="word2vec-google-news-300")
 
